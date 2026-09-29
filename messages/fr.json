@@ -12,10 +12,16 @@
     "contact": "Contact",
     "menu": "Menu",
     "home": "Accueil",
-    "toggleTheme": "Changer de thème",
     "language": "English",
+    "settings": "Préférences",
     "main": "Principale",
     "skipToContent": "Aller au contenu"
+  },
+  "Theme": {
+    "label": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "liquid": "Liquid"
   },
   "Hero": {
     "role": "Développeur produit créatif · SaaS & IA",

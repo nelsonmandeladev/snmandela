@@ -4,11 +4,13 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { InlineScript } from "@/components/inline-script";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routing } from "@/i18n/routing";
+import { liquidModeScript } from "@/lib/liquid-mode-script";
 import { languageAlternates, localeUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "../globals.css";
@@ -102,6 +104,9 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <InlineScript html={liquidModeScript} />
+      </head>
       <body className="group/body min-h-full overscroll-none">
         <NextIntlClientProvider>
           <ThemeProvider

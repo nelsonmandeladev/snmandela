@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant liquid (&:is(.liquid *));
 
 @theme inline {
   --color-brand: var(--brand);
@@ -138,4 +139,60 @@
 
 @utility container {
   @apply mx-auto w-full max-w-[800px] px-4 md:px-6;
+}
+
+/*
+ * Liquid mode: liquidcn glass over the light or dark theme (`.liquid` beside `.dark`).
+ * Material: no blur, a light tint, and the softest springs.
+ */
+.liquid {
+  --liquid-blur: 0px;
+  --liquid-tint: 0.08;
+  --liquid-viscosity: 1;
+}
+
+/* The header: glass capsules over a scroll-edge fade, as in iOS 26. */
+.liquid [data-slot="site-header"] {
+  background: linear-gradient(to bottom, var(--background) 35%, transparent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Liquid pages swap in their header at hydration; hide the classic one until then. */
+.liquid [data-header="classic"] {
+  visibility: hidden;
+}
+
+/* Logo and tabs share one capsule; the tab list gives its glass to it. */
+.liquid-nav {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 52px;
+  padding: 5px;
+  border-radius: 999px;
+}
+
+.liquid-nav .liquid-nav-tabs {
+  height: 40px;
+  padding: 0;
+  background: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.liquid-nav .liquid-tab {
+  padding-inline: 16px;
+}
+
+/* The toolbar capsule matches the nav capsule: 40px buttons, 5px padding, 1px border. */
+.liquid-nav-tools .liquid-toolbar-group {
+  padding: 5px;
+}
+
+.liquid-nav-tools .liquid-toolbar-button {
+  width: 40px;
+  height: 40px;
 }

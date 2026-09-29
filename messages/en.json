@@ -12,10 +12,16 @@
     "contact": "Contact",
     "menu": "Menu",
     "home": "Home",
-    "toggleTheme": "Toggle theme",
     "language": "Français",
+    "settings": "Preferences",
     "main": "Main",
     "skipToContent": "Skip to content"
+  },
+  "Theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "liquid": "Liquid"
   },
   "Hero": {
     "role": "Creative Product Developer · SaaS & AI",

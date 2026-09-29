@@ -6,8 +6,8 @@ import { use } from "react"
 import { CopyEmailButton } from "@/components/copy-email-button"
 import { Icons } from "@/components/icons"
 import { LogoTile } from "@/components/logo-tile"
+import { ThemedButton } from "@/components/themed-button"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { jsonLdScript, personJsonLd } from "@/lib/seo"
 import { experience, projects, siteConfig, skills } from "@/lib/site"
 
@@ -67,17 +67,23 @@ export default function Home({ params }: PageProps<"/[locale]">) {
               {t("Hero.bio")}
             </p>
             <div className="flex items-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
-              <Button size="sm" nativeButton={false} render={<a href="#projects" />}>
+              <ThemedButton
+                size="sm"
+                liquidVariant="prominent"
+                nativeButton={false}
+                render={<a href="#projects" />}
+              >
                 {t("Hero.viewProjects")}
-              </Button>
-              <Button
+              </ThemedButton>
+              <ThemedButton
                 size="sm"
                 variant="ghost"
+                liquidVariant="default"
                 nativeButton={false}
                 render={<a href="#contact" />}
               >
                 {t("Hero.contact")}
-              </Button>
+              </ThemedButton>
             </div>
           </div>
         </div>
@@ -203,8 +209,9 @@ export default function Home({ params }: PageProps<"/[locale]">) {
       >
         <div className="flex flex-wrap items-center gap-2">
           <CopyEmailButton email={siteConfig.email} />
-          <Button
+          <ThemedButton
             variant="outline"
+            liquidVariant="default"
             size="icon"
             nativeButton={false}
             render={
@@ -213,9 +220,10 @@ export default function Home({ params }: PageProps<"/[locale]">) {
           >
             <Icons.gitHub />
             <span className="sr-only">GitHub</span>
-          </Button>
-          <Button
+          </ThemedButton>
+          <ThemedButton
             variant="outline"
+            liquidVariant="default"
             size="icon"
             nativeButton={false}
             render={
@@ -224,16 +232,17 @@ export default function Home({ params }: PageProps<"/[locale]">) {
           >
             <Icons.linkedIn />
             <span className="sr-only">LinkedIn</span>
-          </Button>
-          <Button
+          </ThemedButton>
+          <ThemedButton
             variant="outline"
+            liquidVariant="default"
             size="icon"
             nativeButton={false}
             render={<a href={siteConfig.links.x} target="_blank" rel="noreferrer" />}
           >
             <Icons.x />
             <span className="sr-only">X</span>
-          </Button>
+          </ThemedButton>
         </div>
       </Section>
     </>
