@@ -2,6 +2,15 @@
   "name": "snmandela",
   "version": "0.1.0",
   "private": true,
+  "description": "Personal portfolio of Sonfack Nelson Mandela, creative product developer.",
+  "homepage": "https://snmandela.com",
+  "license": "MIT",
+  "author": "Sonfack Nelson Mandela (https://snmandela.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nelsonmandeladev/snmandela.git"
+  },
+  "bugs": "https://github.com/nelsonmandeladev/snmandela/issues",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
