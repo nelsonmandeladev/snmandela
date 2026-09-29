@@ -118,5 +118,9 @@ export function llmsText() {
     `- LinkedIn: ${siteConfig.links.linkedin}`,
     `- X: ${siteConfig.links.x}`,
     "",
+    "## Optional",
+    "",
+    `- [Source code of this site](${siteConfig.repository})`,
+    "",
   ].join("\n")
 }

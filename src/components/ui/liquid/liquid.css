@@ -1,0 +1,1004 @@
+:root {
+  --liquid-blur: 20px;
+  --liquid-tint: 0.22;
+  --liquid-ink: #172323;
+  --liquid-fill: 255 255 255;
+}
+.liquid-surface {
+  position: relative;
+  color: var(--liquid-ink);
+  background: rgb(var(--liquid-fill) / var(--liquid-tint));
+  border: 1px solid rgb(255 255 255 / 0.65);
+  -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(1.7);
+  backdrop-filter: blur(var(--liquid-blur)) saturate(1.7);
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.9),
+    inset 0 -1px 1px rgb(255 255 255 / 0.25),
+    inset 2px 0 5px rgb(255 255 255 / 0.18),
+    0 8px 28px rgb(0 20 25 / 0.14);
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+/* No focus rings. Keyboard focus tints the glass instead, so it stays visible without one. */
+.liquid-surface:focus-visible,
+.liquid-tab:focus-visible,
+.liquid-toolbar-button:focus-visible,
+.liquid-tab-bar :is(button, input):focus-visible {
+  outline: none;
+}
+.liquid-surface:not(.liquid-interactive, [role="menu"], [role="dialog"]):focus-visible {
+  background-color: rgb(var(--liquid-fill) / calc(var(--liquid-tint) + 0.2));
+}
+.liquid-interactive {
+  position: relative;
+  translate: var(--liquid-x, 0px) var(--liquid-y, 0px);
+  scale: var(--liquid-scale-x, 1) var(--liquid-scale-y, 1);
+  /* The spring owns translate/scale; consumers still own transform. */
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease,
+    opacity 140ms ease;
+}
+/* Keyboard focus tints the glass, like a highlighted menu item. */
+.liquid-interactive:is(:focus-visible, :has(> .liquid-tab-bar-toggle:focus-visible)):not(
+    [data-liquid-variant="prominent"]
+  ) {
+  background-color: color-mix(
+    in srgb,
+    var(--liquid-accent, #155dfc) 18%,
+    rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.3))
+  );
+}
+/* Content morph: new content condenses out of light while the width springs. */
+.liquid-interactive[data-liquid-morphing] {
+  overflow: clip;
+}
+.liquid-interactive[data-liquid-morph="a"] {
+  animation: liquid-ink-in-a 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.liquid-interactive[data-liquid-morph="b"] {
+  animation: liquid-ink-in-b 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.liquid-interactive[data-liquid-morph="a"] > svg {
+  animation: liquid-glyph-in-a 480ms cubic-bezier(0.2, 0.9, 0.25, 1.25);
+}
+.liquid-interactive[data-liquid-morph="b"] > svg {
+  animation: liquid-glyph-in-b 480ms cubic-bezier(0.2, 0.9, 0.25, 1.25);
+}
+@keyframes liquid-ink-in-a {
+  from {
+    color: transparent;
+    text-shadow: 0 0 12px rgb(255 255 255 / 0.95);
+  }
+}
+@keyframes liquid-ink-in-b {
+  from {
+    color: transparent;
+    text-shadow: 0 0 12px rgb(255 255 255 / 0.95);
+  }
+}
+@keyframes liquid-glyph-in-a {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+    scale: 0.45;
+  }
+}
+@keyframes liquid-glyph-in-b {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+    scale: 0.45;
+  }
+}
+.liquid-button {
+  border-radius: 999px;
+  min-height: 44px;
+  font-weight: 600;
+  padding-inline: 24px;
+}
+.liquid-button:hover:not(:disabled) {
+  background: rgb(var(--liquid-fill) / calc(var(--liquid-tint) + 0.1));
+  box-shadow:
+    inset 0 1px 2px white,
+    inset 0 -1px 2px rgb(190 224 255 / 0.5),
+    0 8px 28px rgb(0 20 25 / 0.14);
+}
+.liquid-button[data-size^="icon"] {
+  padding-inline: 0;
+  min-width: 44px;
+}
+.liquid-button[data-liquid-variant="destructive"] {
+  --liquid-ink: #a20c22;
+  --liquid-fill: 255 200 208;
+}
+.liquid-button[data-liquid-variant="link"] {
+  text-decoration: underline;
+}
+.liquid-button[data-liquid-variant="secondary"] {
+  background: rgb(var(--liquid-fill) / 0.55);
+}
+.liquid-button[aria-expanded="true"] > svg {
+  rotate: 180deg;
+}
+.liquid-button > svg {
+  transition: rotate 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Segmented tabs and toolbars share one lens. */
+.liquid-tabs {
+  border-radius: 999px;
+  padding: 5px;
+  height: 52px;
+  gap: 3px;
+  isolation: isolate;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease,
+    scale 460ms cubic-bezier(0.25, 1.45, 0.45, 1);
+}
+.liquid-tabs[aria-orientation="vertical"] {
+  height: auto;
+  border-radius: 26px;
+  touch-action: pan-x;
+}
+/* The whole bar swells a little while a finger is on it. */
+.liquid-tabs[data-liquid-pressed] {
+  scale: 1.025;
+  transition-duration: 200ms, 200ms, 240ms;
+}
+.liquid-tab {
+  position: relative;
+  color: var(--liquid-ink);
+  /* The base trigger borders the active tab in dark mode, and ahead of the travelling lens. */
+  border-color: transparent;
+  border-radius: 999px;
+  padding-inline: 22px;
+  height: 40px;
+  background: transparent;
+  transition: color 180ms ease;
+}
+.liquid-tab[aria-selected="true"] {
+  color: var(--liquid-ink);
+  background: rgb(var(--liquid-fill) / 0.58);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.8);
+}
+.liquid-tabs[data-liquid-indicator] .liquid-tab[aria-selected="true"] {
+  background: transparent;
+  box-shadow: none;
+}
+.liquid-tab:hover:not(:disabled) {
+  color: var(--liquid-ink);
+}
+/* The base tabs draw a ring on focus; glass has none. */
+.liquid-tab:focus-visible:not([aria-selected="true"]) {
+  box-shadow: none;
+  background: rgb(var(--liquid-fill) / 0.3);
+}
+/* An iOS tab bar: add `liquid-tabbar` to a TabsList to stack icons over labels. */
+.liquid-tabbar {
+  height: 66px;
+  padding: 5px;
+  gap: 0;
+}
+.liquid-tabbar .liquid-tab {
+  height: 54px;
+  min-width: 88px;
+  flex-direction: column;
+  gap: 3px;
+  padding-inline: 14px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.liquid-tabbar .liquid-tab svg {
+  width: 23px;
+  height: 23px;
+}
+.liquid-lens {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  pointer-events: none;
+  /* At rest: a frosted pill. Lifted: clear glass with a bright, faintly chromatic rim. */
+  background:
+    linear-gradient(
+      135deg,
+      rgb(255 255 255 / calc(0.2 * (1 - var(--liquid-lift, 0)))),
+      transparent 55%
+    ),
+    rgb(
+      var(--liquid-lens-fill, 255 255 255) /
+        calc(var(--liquid-lens-alpha, 0.5) * (1 - 0.8 * var(--liquid-lift, 0)))
+    );
+  box-shadow:
+    inset 0 1px 1.5px rgb(255 255 255 / calc(0.75 + 0.25 * var(--liquid-lift, 0))),
+    inset 0 -1px 1.5px rgb(255 255 255 / calc(0.25 + 0.5 * var(--liquid-lift, 0))),
+    inset 2px 0 3px -1px rgb(255 110 190 / calc(0.55 * var(--liquid-lift, 0))),
+    inset -2px 0 3px -1px rgb(70 200 255 / calc(0.55 * var(--liquid-lift, 0)));
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+[data-liquid-indicator] > .liquid-lens {
+  opacity: 1;
+}
+/* Focus on the selected item tints the lens over it. */
+[data-liquid-indicator]:has(
+    > :is([aria-selected="true"], [aria-pressed="true"], [aria-current]):focus-visible
+  )
+  > .liquid-lens {
+  --liquid-lens-fill: 0 122 255;
+  --liquid-lens-alpha: 0.2;
+}
+/* An inert copy of the list, magnified and tinted inside the lens. */
+.liquid-lens > .liquid-lens-optics {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  color: var(--liquid-lens-ink, var(--liquid-accent, var(--liquid-system-accent, #155dfc)));
+  /* The copy carries the list's classes; strip its material, whichever rule set it. */
+  background: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  text-shadow: none;
+  translate: none;
+  scale: none;
+  transition: none;
+  animation: none;
+  pointer-events: none;
+}
+.liquid-lens-optics * {
+  color: inherit !important;
+  text-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+.liquid-lens-optics > * {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  translate: none !important;
+  scale: none !important;
+}
+/* Once the lens has landed the copy stands in for the selected label. */
+[data-liquid-lens="rest"]
+  :is(.liquid-tab[aria-selected="true"], .liquid-toolbar-button[aria-pressed="true"]):not(
+    .liquid-lens *
+  ) {
+  color: transparent;
+  text-shadow: none;
+}
+.liquid-menu {
+  --liquid-menu-x: 0px;
+  --liquid-menu-y: -10px;
+  --liquid-menu-scale-x: 0.8;
+  --liquid-menu-scale-y: 0.6;
+  --liquid-menu-radius: 70px;
+  --liquid-menu-mid-x: 0px;
+  --liquid-menu-mid-y: -5px;
+  --liquid-menu-mid-scale-x: 0.7;
+  --liquid-menu-mid-scale-y: 0.7;
+  border-radius: 22px;
+  padding: 6px;
+  min-width: 220px;
+  background: rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.68));
+  transform-origin: center;
+  transition: background 200ms ease;
+  /*
+   * The panel clips and its body scrolls. The body arrives magnified as the panel forms; were
+   * the panel the scroller, that growth would flash scrollbars during every entrance.
+   */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.liquid-menu [role^="menuitem"] {
+  min-height: 40px;
+  border-radius: 15px;
+  color: inherit;
+  transition: background 140ms ease;
+}
+/* Primitives move focus to the item under the pointer as well as the keyboard's. */
+.liquid-menu [role^="menuitem"]:focus {
+  background: rgb(0 122 255 / 0.16);
+}
+.liquid-menu [data-variant="destructive"] {
+  color: #c52238;
+}
+/* Fills the panel, whose max height the base component sets from its primitive, and scrolls. */
+.liquid-menu-body {
+  flex: 0 1 auto;
+  min-height: 0;
+  transform-origin: 50% 40%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.liquid-menu[data-liquid-state="open"]:not([data-liquid-morph="ready"]) {
+  opacity: 0;
+}
+.liquid-menu[data-liquid-state="open"][data-liquid-morph="ready"] {
+  animation: liquid-menu-unfold var(--liquid-morph-duration, 520ms) both;
+}
+.liquid-menu[data-liquid-state="open"][data-liquid-morph="ready"] > .liquid-menu-body {
+  animation: liquid-menu-body-in var(--liquid-morph-duration, 520ms) both;
+}
+.liquid-menu[data-liquid-state="closed"] {
+  animation: liquid-menu-fold 320ms both;
+  pointer-events: none;
+}
+.liquid-menu[data-liquid-state="closed"] > .liquid-menu-body {
+  animation: liquid-menu-body-out 130ms ease-in both;
+}
+/* The trigger swells into a round droplet, which stretches into the panel. */
+@keyframes liquid-menu-unfold {
+  0% {
+    opacity: 0.7;
+    transform: translate(var(--liquid-menu-x), var(--liquid-menu-y))
+      scale(var(--liquid-menu-scale-x), var(--liquid-menu-scale-y));
+    border-radius: var(--liquid-menu-radius);
+    animation-timing-function: cubic-bezier(0.3, 0.1, 0.5, 1);
+  }
+  26% {
+    opacity: 1;
+    transform: translate(var(--liquid-menu-mid-x), var(--liquid-menu-mid-y))
+      scale(var(--liquid-menu-mid-scale-x), var(--liquid-menu-mid-scale-y));
+    border-radius: 50%;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  62% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.025, 1.04);
+    border-radius: 22px;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.3, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+    border-radius: 22px;
+  }
+}
+/* Content arrives magnified and out of focus, as if seen through the forming lens. */
+@keyframes liquid-menu-body-in {
+  0%,
+  16% {
+    opacity: 0;
+    transform: scale(1.3);
+    filter: blur(10px);
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes liquid-menu-body-out {
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+    filter: blur(6px);
+  }
+}
+/* The panel collapses into a droplet that is drawn back into its trigger. */
+@keyframes liquid-menu-fold {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+    border-radius: 22px;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.7, 0.4);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(var(--liquid-menu-mid-x), var(--liquid-menu-mid-y))
+      scale(
+        calc(var(--liquid-menu-mid-scale-x) * 0.78),
+        calc(var(--liquid-menu-mid-scale-y) * 0.95)
+      );
+    border-radius: 50%;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--liquid-menu-x), var(--liquid-menu-y))
+      scale(var(--liquid-menu-scale-x), var(--liquid-menu-scale-y));
+    border-radius: var(--liquid-menu-radius);
+  }
+}
+/* A trigger covered by its menu becomes the menu, then reappears as the droplet lands. */
+[data-liquid-covered] {
+  transition: opacity 140ms ease 120ms;
+}
+[data-liquid-covered][aria-expanded="true"] {
+  opacity: 0;
+  transition: opacity 90ms ease;
+}
+/* The shell toolbars and tab bars share: capsules of glass, and round buttons beside them. */
+.liquid-toolbar,
+.liquid-tab-bar {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+.liquid-toolbar[aria-orientation="vertical"] {
+  flex-direction: column;
+}
+.liquid-toolbar-group {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 999px;
+  gap: 4px;
+  isolation: isolate;
+}
+.liquid-toolbar-group[data-orientation="vertical"] {
+  flex-direction: column;
+}
+/* Toolbar buttons are liquid Buttons: ghost on a group's glass, glass of their own outside. */
+.liquid-toolbar-button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-width: 0;
+  height: 44px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 50%;
+}
+.liquid-toolbar-button svg {
+  width: 21px;
+  height: 21px;
+}
+/* An icon, not a disclosure chevron: it stays put while its menu is open. */
+.liquid-toolbar .liquid-button > svg {
+  rotate: none;
+}
+.liquid-toolbar-group .liquid-toolbar-button:hover:not(:disabled),
+.liquid-toolbar-group .liquid-toolbar-button[aria-pressed="true"] {
+  background: rgb(255 255 255 / 0.18);
+  box-shadow: none;
+}
+.liquid-toolbar-group[data-liquid-indicator] .liquid-toolbar-button[aria-pressed="true"] {
+  background: transparent;
+}
+.liquid-toolbar-button:disabled {
+  opacity: 0.5;
+}
+/* A button of its own is as tall as a group: 44px buttons, 6px padding, 1px border. */
+.liquid-toolbar > .liquid-toolbar-button {
+  width: 58px;
+  height: 58px;
+}
+.liquid-toolbar > .liquid-toolbar-button svg {
+  width: 22px;
+  height: 22px;
+}
+.liquid-toolbar-separator {
+  flex: none;
+  height: 20px;
+  width: 1px;
+  background: rgb(255 255 255 / 0.4);
+  margin-inline: 3px;
+}
+.liquid-toolbar-separator[aria-orientation="horizontal"] {
+  height: 1px;
+  width: 20px;
+  margin: 3px 0;
+}
+/* A tab bar with a search button beside it (iOS 26 search tab, button appearance). */
+.liquid-tab-bar:has(.liquid-tabbar) {
+  --liquid-tab-bar-circle: 68px;
+}
+.liquid-tab-bar[data-searching] {
+  width: var(--liquid-tab-bar-width, auto);
+}
+.liquid-tab-bar-items {
+  flex: none;
+  min-width: 0;
+  display: flex;
+  border-radius: 999px;
+  transition:
+    background 200ms ease,
+    box-shadow 200ms ease,
+    scale 460ms cubic-bezier(0.25, 1.45, 0.45, 1);
+}
+/* The glass is the wrapper's, so the tabs inside it can collapse with it. */
+.liquid-tab-bar-items > .liquid-tab-bar-tabs > .liquid-surface {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.liquid-tab-bar-items:has([data-liquid-pressed]) {
+  scale: 1.025;
+  transition-duration: 200ms, 200ms, 240ms;
+}
+.liquid-tab-bar-items [data-liquid-pressed] {
+  scale: none;
+}
+.liquid-tab-bar-tabs {
+  display: flex;
+  flex: none;
+  transition:
+    opacity 220ms ease,
+    filter 260ms ease,
+    scale 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.liquid-tab-bar[data-searching] .liquid-tab-bar-items {
+  width: var(--liquid-tab-bar-circle, 52px);
+}
+.liquid-tab-bar:is([data-searching], [data-liquid-morphing]) .liquid-tab-bar-items {
+  overflow: clip;
+}
+.liquid-tab-bar[data-searching] .liquid-tab-bar-tabs {
+  opacity: 0;
+  filter: blur(6px);
+  scale: 0.86;
+  transform-origin: left center;
+}
+.liquid-tab-bar-restore,
+.liquid-tab-bar-toggle,
+.liquid-tab-bar-close {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+}
+.liquid-tab-bar-restore {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: var(--liquid-tab-bar-circle, 52px);
+  animation: liquid-glyph-in-a 480ms cubic-bezier(0.2, 0.9, 0.25, 1.25);
+}
+.liquid-tab-bar-restore svg,
+.liquid-tab-bar-toggle svg {
+  width: 22px;
+  height: 22px;
+}
+.liquid-tab-bar-search {
+  flex: none;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  width: var(--liquid-tab-bar-circle, 52px);
+  height: var(--liquid-tab-bar-circle, 52px);
+  border-radius: 999px;
+  overflow: clip;
+}
+.liquid-tab-bar[data-searching] .liquid-tab-bar-search {
+  flex: 1 1 0;
+  width: auto;
+}
+.liquid-tab-bar[data-liquid-morphing] > :is(.liquid-tab-bar-items, .liquid-tab-bar-search) {
+  flex: none;
+}
+.liquid-tab-bar-toggle {
+  flex: none;
+  width: 100%;
+  height: 100%;
+}
+.liquid-tab-bar-toggle > svg {
+  animation: liquid-glyph-in-b 480ms cubic-bezier(0.2, 0.9, 0.25, 1.25);
+}
+.liquid-tab-bar-search > :not(.liquid-tab-bar-toggle) {
+  animation: liquid-tab-bar-field-in 380ms cubic-bezier(0.2, 0.8, 0.2, 1) 40ms both;
+}
+.liquid-tab-bar-glass {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  margin-inline: 16px 8px;
+  opacity: 0.7;
+}
+.liquid-tab-bar-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.liquid-tab-bar-search input::placeholder {
+  color: inherit;
+  opacity: 0.62;
+}
+.liquid-tab-bar-search input::-webkit-search-cancel-button {
+  display: none;
+}
+.liquid-tab-bar-restore:focus-visible {
+  background: rgb(var(--liquid-fill) / 0.45);
+}
+.liquid-tab-bar-close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  margin-inline: 8px 10px;
+  background: rgb(var(--liquid-fill) / 0.5);
+}
+.liquid-tab-bar-close svg {
+  width: 16px;
+  height: 16px;
+}
+@keyframes liquid-tab-bar-field-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+/* Dark lenses brighten the default accent for legible labels; --liquid-accent still wins. */
+.dark .liquid-surface,
+[data-liquid-theme="dark"] .liquid-surface {
+  --liquid-fill: 22 27 30;
+  --liquid-ink: #fff;
+  --liquid-lens-alpha: 0.16;
+  --liquid-system-accent: #5aabff;
+  border-color: rgb(255 255 255 / 0.3);
+}
+[data-reduced-transparency="true"] .liquid-surface {
+  background: rgb(var(--liquid-fill));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+[data-reduced-transparency="true"] .liquid-lens {
+  --liquid-lens-fill: 120 120 128;
+  --liquid-lens-alpha: 0.16;
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .liquid-surface {
+    background: rgb(var(--liquid-fill) / 0.96);
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .liquid-surface {
+    background: rgb(var(--liquid-fill));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .liquid-lens {
+    --liquid-lens-fill: 120 120 128;
+    --liquid-lens-alpha: 0.16;
+  }
+}
+/* No glass until hovered or pressed, in every material. After the material overrides. */
+.liquid-button:is([data-liquid-variant="ghost"], [data-liquid-variant="link"]) {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* Tinted glass, like iOS .glassProminent. Placed after the material overrides it replaces. */
+.liquid-button[data-liquid-variant="prominent"],
+.liquid-button[data-liquid-variant="prominent"]:hover:not(:disabled) {
+  --liquid-ink: #fff;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.22), transparent 60%), var(--liquid-accent, #155dfc);
+  border-color: rgb(255 255 255 / 0.35);
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.55),
+    0 8px 24px color-mix(in srgb, var(--liquid-accent, #155dfc) 35%, transparent);
+}
+.liquid-button[data-liquid-variant="prominent"]:focus-visible {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.22), transparent 60%),
+    color-mix(in srgb, var(--liquid-accent, #155dfc) 78%, #fff);
+}
+[data-reduced-motion="true"] .liquid-surface,
+[data-reduced-motion="true"] .liquid-interactive,
+[data-reduced-motion="true"] .liquid-interactive > svg,
+[data-reduced-motion="true"] .liquid-menu > *,
+[data-reduced-motion="true"] .liquid-button > svg,
+[data-reduced-motion="true"] .liquid-lens,
+[data-reduced-motion="true"] [data-liquid-covered] {
+  transition: none !important;
+  animation: none !important;
+}
+[data-reduced-motion="true"] .liquid-interactive {
+  translate: none;
+  scale: none;
+}
+[data-reduced-motion="true"] .liquid-tabs {
+  scale: none;
+}
+[data-reduced-motion="true"] .liquid-menu[data-liquid-state="open"] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .liquid-surface,
+  .liquid-tab,
+  .liquid-interactive,
+  .liquid-interactive > svg,
+  .liquid-menu > *,
+  .liquid-button > svg,
+  .liquid-lens,
+  [data-liquid-covered] {
+    transition: none !important;
+    animation: none !important;
+  }
+  .liquid-interactive {
+    translate: none;
+    scale: none;
+  }
+  .liquid-tabs {
+    scale: none;
+  }
+  .liquid-menu[data-liquid-state="open"] {
+    opacity: 1;
+  }
+}
+@media (forced-colors: active) {
+  .liquid-surface {
+    border: 1px solid ButtonText;
+  }
+  /* Forced colors replace the tint that marks keyboard focus, so an outline marks it here. */
+  .liquid-surface:focus-visible,
+  .liquid-tab:focus-visible,
+  .liquid-toolbar-button:focus-visible,
+  .liquid-tab-bar :is(button, input):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .liquid-lens {
+    background: Highlight;
+    box-shadow: none;
+  }
+  .liquid-lens > .liquid-lens-optics {
+    color: HighlightText;
+  }
+}
+/* The neck where two glass surfaces flow into each other. Decorative, drawn only in motion. */
+.liquid-fusion {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+.liquid-fusion[data-layer="fixed"] {
+  position: fixed;
+  z-index: 50;
+}
+.liquid-fusion > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: rgb(255 255 255 / 0.7);
+  stroke-width: 1.5px;
+}
+/* Refraction: the rim bends the backdrop (Chromium). Only where glass is see-through. */
+@media (prefers-reduced-transparency: no-preference) and (prefers-contrast: no-preference) and (forced-colors: none) {
+  .liquid-surface[data-liquid-refraction]:not([data-reduced-transparency="true"] *) {
+    -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(1.7) var(--liquid-refraction);
+    backdrop-filter: blur(var(--liquid-blur)) saturate(1.7) var(--liquid-refraction);
+  }
+}
+[data-reduced-motion="true"] .liquid-fusion,
+[data-reduced-motion="true"] .liquid-tab-bar *,
+[data-reduced-motion="true"] .liquid-tab-bar-items {
+  transition: none !important;
+  animation: none !important;
+}
+[data-reduced-motion="true"] .liquid-fusion {
+  display: none;
+}
+[data-reduced-motion="true"] .liquid-tab-bar-items {
+  scale: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .liquid-fusion {
+    display: none;
+  }
+  .liquid-tab-bar *,
+  .liquid-tab-bar-items {
+    transition: none !important;
+    animation: none !important;
+  }
+  .liquid-tab-bar-items {
+    scale: none;
+  }
+}
+@media (forced-colors: active) {
+  .liquid-fusion {
+    display: none;
+  }
+  .liquid-tab-bar-close {
+    border: 1px solid ButtonText;
+  }
+}
+/* Liquid notifications. Keep Sonner's transform for stacking and swipe gestures. */
+.liquid-toaster [data-sonner-toast].liquid-toast {
+  position: absolute;
+  width: var(--width);
+  padding: 18px 44px 18px 18px;
+  gap: 12px;
+  border-radius: 28px;
+  border: 1px solid rgb(255 255 255 / 0.8);
+  color: var(--liquid-ink);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.18), transparent 60%),
+    rgb(var(--liquid-fill) / max(var(--liquid-tint), 0.72));
+  -webkit-backdrop-filter: blur(var(--liquid-blur)) saturate(1.8);
+  backdrop-filter: blur(var(--liquid-blur)) saturate(1.8);
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.95),
+    inset 0 -1px 1px rgb(255 255 255 / 0.3),
+    0 12px 36px rgb(0 20 25 / 0.15);
+  scale: 0.45 0.7;
+  transform-origin: top center;
+  transition:
+    transform 520ms cubic-bezier(0.2, 0.9, 0.25, 1.15),
+    scale 520ms cubic-bezier(0.2, 0.9, 0.25, 1.15),
+    opacity 180ms ease,
+    height 380ms cubic-bezier(0.2, 0.9, 0.25, 1.1),
+    border-radius 420ms ease,
+    box-shadow 200ms ease;
+}
+.liquid-toaster [data-sonner-toast].liquid-toast[data-mounted="true"] {
+  scale: 1;
+}
+.liquid-toaster [data-sonner-toast].liquid-toast[data-mounted="false"] {
+  border-radius: 60px;
+}
+.liquid-toaster [data-sonner-toast].liquid-toast[data-removed="true"][data-swipe-out="false"] {
+  scale: 0.55 0.75;
+  border-radius: 60px;
+  transition-duration: 180ms;
+}
+.liquid-toaster .liquid-toast [data-content] {
+  gap: 4px;
+  min-width: 0;
+}
+.liquid-toaster .liquid-toast [data-title] {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+.liquid-toaster .liquid-toast [data-description] {
+  font-size: 12px;
+  line-height: 1.5;
+  color: inherit;
+  opacity: 0.65;
+  overflow-wrap: anywhere;
+}
+.liquid-toaster .liquid-toast [data-icon] {
+  align-self: center;
+  margin: 0;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  justify-content: center;
+}
+.liquid-toaster .liquid-toast [data-icon] svg {
+  width: 20px;
+  height: 20px;
+}
+.liquid-toaster .liquid-toast[data-type="success"] [data-icon] {
+  color: #168451;
+}
+.liquid-toaster .liquid-toast[data-type="error"] [data-icon] {
+  color: #cf3445;
+}
+.liquid-toaster .liquid-toast[data-type="warning"] [data-icon] {
+  color: #ac6a0b;
+}
+.liquid-toaster .liquid-toast[data-type="info"] [data-icon] {
+  color: #007aff;
+}
+.liquid-toaster .liquid-toast [data-content],
+.liquid-toaster .liquid-toast [data-icon],
+.liquid-toaster .liquid-toast [data-button] {
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity 180ms ease 100ms,
+    filter 260ms ease 80ms;
+}
+.liquid-toaster .liquid-toast[data-mounted="true"] [data-content],
+.liquid-toaster .liquid-toast[data-mounted="true"] [data-icon],
+.liquid-toaster .liquid-toast[data-mounted="true"] [data-button] {
+  opacity: 1;
+  filter: blur(0);
+}
+.liquid-toaster .liquid-toast[data-removed="true"] [data-content],
+.liquid-toaster .liquid-toast[data-removed="true"] [data-icon] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+.liquid-toaster .liquid-toast[data-expanded="false"][data-front="false"] > * {
+  opacity: 0;
+}
+.liquid-toaster [data-sonner-toast].liquid-toast [data-close-button] {
+  left: auto;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: inherit;
+  background: rgb(var(--liquid-fill) / 0.4);
+  border: 1px solid rgb(128 128 128 / 0.12);
+}
+.liquid-toaster [data-sonner-toast].liquid-toast [data-close-button]:hover {
+  background: rgb(var(--liquid-fill) / 0.85);
+}
+.liquid-toaster .liquid-toast [data-button] {
+  border-radius: 999px;
+}
+.dark .liquid-toaster .liquid-toast,
+[data-liquid-theme="dark"] .liquid-toaster .liquid-toast {
+  border-color: rgb(255 255 255 / 0.25);
+}
+.dark .liquid-toaster .liquid-toast[data-type="success"] [data-icon],
+[data-liquid-theme="dark"] .liquid-toaster .liquid-toast[data-type="success"] [data-icon] {
+  color: #6ddeac;
+}
+[data-reduced-transparency="true"] .liquid-toaster .liquid-toast {
+  background: rgb(var(--liquid-fill));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+[data-reduced-motion="true"] .liquid-toaster .liquid-toast {
+  scale: 1 !important;
+  transition: none !important;
+}
+[data-reduced-motion="true"] .liquid-toaster .liquid-toast * {
+  transition: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .liquid-toaster .liquid-toast {
+    scale: 1 !important;
+    transition: none !important;
+  }
+  .liquid-toaster .liquid-toast * {
+    transition: none !important;
+    animation: none !important;
+    filter: none !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .liquid-toaster .liquid-toast {
+    background: rgb(var(--liquid-fill));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .liquid-toaster .liquid-toast {
+    background: rgb(var(--liquid-fill));
+  }
+}

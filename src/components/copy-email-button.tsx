@@ -4,7 +4,7 @@ import * as React from "react"
 import { CheckIcon, CopyIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 
-import { Button } from "@/components/ui/button"
+import { ThemedButton } from "@/components/themed-button"
 import {
   Tooltip,
   TooltipContent,
@@ -26,7 +26,7 @@ export function CopyEmailButton({ email }: { email: string }) {
     <Tooltip open={copied}>
       <TooltipTrigger
         render={
-          <Button
+          <ThemedButton
             aria-label={t("copyEmail")}
             onClick={async () => {
               await navigator.clipboard.writeText(email)

@@ -7,6 +7,7 @@ export const siteConfig = {
   twitter: "@sn_mandela",
   url: "https://snmandela.com",
   email: "sonfacknelsonmandela@gmail.com",
+  repository: "https://github.com/nelsonmandeladev/snmandela",
   links: {
     github: "https://github.com/nelsonmandeladev",
     linkedin: "https://linkedin.com/in/snmdev",

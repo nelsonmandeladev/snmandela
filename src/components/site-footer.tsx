@@ -23,7 +23,7 @@ export function SiteFooter() {
               ),
               github: (chunks) => (
                 <a
-                  href={siteConfig.links.github}
+                  href={siteConfig.repository}
                   target="_blank"
                   rel="noreferrer"
                   className="font-medium underline underline-offset-4"
