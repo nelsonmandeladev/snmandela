@@ -1,0 +1,79 @@
+{
+  "Metadata": {
+    "title": "Sonfack Nelson Mandela | Développeur produit créatif",
+    "description": "Développeur produit créatif avec plus de 6 ans d'expérience à créer des SaaS et produits IA avec Next.js et TypeScript, de l'UI au backend.",
+    "tagline": "6+ ans · Développeur produit créatif",
+    "keywords": "Sonfack Nelson Mandela, snmandela, développeur produit créatif, développeur fullstack, développeur Next.js, développeur React, TypeScript, SaaS, produits IA, shadcn/ui, NestJS, Convex, lead frontend, développeur remote, Yaoundé, Cameroun, Afrique"
+  },
+  "Nav": {
+    "about": "À propos",
+    "projects": "Projets",
+    "experience": "Expérience",
+    "contact": "Contact",
+    "menu": "Menu",
+    "home": "Accueil",
+    "toggleTheme": "Changer de thème",
+    "language": "English",
+    "main": "Principale",
+    "skipToContent": "Aller au contenu"
+  },
+  "Hero": {
+    "role": "Développeur produit créatif · SaaS & IA",
+    "bio": "Plus de 6 ans à livrer des applications web et SaaS avec Next.js et TypeScript, de l'UI au backend. Basé à Yaoundé, en remote.",
+    "viewProjects": "Voir les projets",
+    "contact": "Me contacter"
+  },
+  "Stack": {
+    "title": "Stack",
+    "description": "Les outils que j'utilise au quotidien."
+  },
+  "Projects": {
+    "title": "Projets",
+    "description": "Une sélection de réalisations.",
+    "roliii": "SaaS IA de recherche d'emploi qui trouve des offres à partir de votre CV. Conçu seul, de bout en bout.",
+    "paykko": "Landing page d'une app d'épargne et de tontines Mobile Money.",
+    "oloroun": "Plateforme de distribution de jeux, web et desktop.",
+    "cartevo": "Dashboard de cartes virtuelles multi-devises avec KYC/KYB.",
+    "adsquid": "Plateforme de contenu marketing IA en temps réel.",
+    "liquidcn": "Composants Liquid Glass pour shadcn/ui, installables depuis un registre.",
+    "ugiii": "Marketplace où les entreprises africaines engagent des créateurs africains pour du contenu UGC authentique.",
+    "status": {
+      "openSource": "Open source",
+      "building": "En cours",
+      "buildingNote": "Disponible fin octobre"
+    }
+  },
+  "Experience": {
+    "title": "Expérience",
+    "description": "Où j'ai travaillé.",
+    "gara": {
+      "role": "Principal Frontend Developer",
+      "period": "Déc. 2025 — Aujourd'hui",
+      "summary": "Pilotage du frontend d'Oloroun (web & desktop) et développement de Paykko."
+    },
+    "afreeserv": {
+      "role": "Lead Frontend Developer",
+      "period": "Juin 2025 — Janv. 2026",
+      "summary": "Encadrement de 5 développeurs jusqu'à la V1 d'une marketplace de services africaine."
+    },
+    "kevmax": {
+      "role": "Senior Full-Stack Developer",
+      "period": "Mai 2023 — Mai 2025",
+      "summary": "Dashboard Next.js SSR/ISR : −30 % de TTFB, +15 % de rétention."
+    },
+    "abyster": {
+      "role": "Frontend Engineer",
+      "period": "Déc. 2022 — Déc. 2023",
+      "summary": "Sites Next.js orientés SEO : +25 % de trafic organique."
+    }
+  },
+  "Contact": {
+    "title": "Contact",
+    "description": "Un projet en tête ? Écrivez-moi.",
+    "copyEmail": "Copier l'adresse e-mail",
+    "copied": "Copié !"
+  },
+  "Footer": {
+    "builtBy": "Réalisé par <name></name>. Code source sur <github>GitHub</github>."
+  }
+}
