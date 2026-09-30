@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Analytics } from "@vercel/analytics/next"
 
 import { InlineScript } from "@/components/inline-script";
 import { SiteFooter } from "@/components/site-footer";
@@ -108,6 +109,7 @@ export default async function LocaleLayout({
         <InlineScript html={liquidModeScript} />
       </head>
       <body className="group/body min-h-full overscroll-none">
+        <Analytics />
         <NextIntlClientProvider>
           <ThemeProvider
             attribute="class"
